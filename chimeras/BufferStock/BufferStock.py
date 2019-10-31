@@ -175,12 +175,6 @@ os.getcwd()
 model_dolo = yaml_import("./bufferstock.yaml")
 print( model_dolo )
 
-# %% {"code_folding": [0]}
-# Set a maximum value of the market resources ratio m for use in both models
-max_m = 500
-model_dolo.data['calibration']['max_m'] = max_m
-model_dolo.data['domain']['m'] = [0,'max_m']
-
 # Obtain the decision rule by time iteration
 dr = time_iteration(model_dolo,tol=1e-08,verbose=True)
 

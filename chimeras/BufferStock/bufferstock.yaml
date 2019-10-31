@@ -23,10 +23,11 @@ calibration:
     perm: 1.0
     tran: 1.0
     m: 1.0
+    max_m: 500
     c: 0.9*m
 
 domain:
-    m: [0.0, 1000.0]
+    m: [0.0, max_m]
 
 exogenous: !Normal
     Sigma: [[σ_perm^2,         0]
