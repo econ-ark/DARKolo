@@ -299,7 +299,65 @@ cPF = (np.array(m)-1+1/(1-PermGroFac/Rfree))*((Rfree-(Rfree * DiscFac)**(1/CRRA)
 plt.plot(tab['m'],c_m,color="red")
 plt.plot(m,cPF,color="green")
 
+# %% [markdown]
+# ### [Upper and Lower Limits of the Marginal Propensity to Consume](https://econ.jhu.edu/people/ccarroll/papers/BufferStockTheory/#MPCLimits)
+#
+# The paper shows that as $m_{t}~\uparrow~\infty$ the consumption function in the presence of risk gets arbitrarily close to the perfect foresight consumption function.  Defining \underline{κ}
+# as the perfect foresight model's MPC, this implies that $\lim_{m_{t}~\uparrow~\infty} c^{\prime}(m) = $ \underline{κ}
+# .
+#
+# The paper also derives an analytical limit $\bar{\kappa}$ for the MPC as $m$ approaches 0., its bounding value.  Strict concavity of the consumption function implies that the consumption function will be everywhere below a function $\bar{\kappa}m$, and strictly declining everywhere.  The last figure plots the MPC between these two limits.
+
 # %%
-tab
+# Define k_lower, h_inf and perfect foresight consumption function, upper bound of consumption function and lower
+# bound of consumption function.
+k_lower = 1.0-(model_HARK.Rfree**(-1.0))*(model_HARK.Rfree*model_HARK.DiscFac)**(1.0/model_HARK.CRRA)
+
+
+# %%
+# The last figure shows the upper and lower limits of the MPC
+plt.figure(figsize = (12,8))
+# Set the plot range of m
+m = np.linspace(0.001,8,1000)
+
+# Use the HARK method derivative to get the derivative of cFunc, and the values are just the MPC
+MPC = model_HARK.cFunc[0].derivative(m)
+
+# Define the upper bound of MPC
+MPCUpper = (1 - model_HARK.UnempPrb ** (1.0/model_HARK.CRRA)*(model_HARK.Rfree*model_HARK.DiscFac)**(1.0/model_HARK.CRRA)/model_HARK.Rfree)
+
+# Define the lower bound of MPC
+MPCLower = k_lower
+
+kappaDef=r'$\underline{\kappa}$'
+if not iflatexExists:
+    kappaDef=r'κ̲$\equiv(1-\Phi_{R})$'
+
+plt.plot(m,MPC,color = 'black')
+plt.plot([0,8],[MPCUpper,MPCUpper],color = 'black')
+plt.plot([0,8],[MPCLower,MPCLower],color = 'black')
+plt.xlim(0,8)
+plt.ylim(0,1)
+plt.text(1.5,0.6,r'$\kappa(m) \equiv c^{\prime}(m)$',fontsize = 26,fontweight='bold')
+if iflatexExists:
+    plt.text(5,0.87,r'$(\overline{\kappa}$',fontsize = 26,fontweight='bold')
+else:
+    plt.text(5,0.87,r'$(1-\wp^{1/\rho}\Phi_{R})\equiv \overline{\kappa}$',fontsize = 26,fontweight='bold')
+    
+plt.text(0.5,0.07,kappaDef,fontsize = 26,fontweight='bold')
+plt.text(8.05,0,"$m$",fontsize = 26)
+plt.arrow(1.45,0.61,-0.4,0,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
+plt.arrow(2.2,0.07,0.2,-0.01,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
+plt.arrow(4.95,0.895,-0.2,0.03,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
+if Generator:
+    plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.png'))
+    plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.jpg'))
+    plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.pdf'))
+    plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.svg'))
+if not in_ipynb():
+    plt.show(block=False) 
+    plt.pause(1)
+else:
+    plt.show(block=True) # Change to False if you want to run uninterrupted
 
 # %%
