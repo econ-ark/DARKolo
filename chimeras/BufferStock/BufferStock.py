@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.2'
-#       jupytext_version: 1.2.1
+#       jupytext_version: 1.2.4
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -152,7 +152,7 @@ if Generator:
 # For the purposes of this notebook, [the paper's](http://econ.jhu.edu/people/ccarroll/papers/BufferStockTheory) baseline [parameterization](http://www.econ2.jhu.edu/people/ccarroll/papers/BufferStockTheory/#Baseline-Numerical-Solution) is changed as follows:
 #
 # 1. The unemployment (zero-income event) shocks are turned off
-# 2. An explicit liqudity constraint is added ($c_{t} \leq m_{t}$); that is, the consumer is prohibited from borrowing
+# 2. An explicit liqudity constraint is added ($c_{t} \leq m_{t}$); that is, the consumer is prohibited from borrowing, and consumption must always be greater than zero
 
 # %% [markdown]
 # # Dolo
@@ -179,10 +179,34 @@ print( model_dolo )
 dr = time_iteration(model_dolo,tol=1e-08,verbose=True)
 
 # %% [markdown]
+# ## Explaining the Dolo Model File
+#
+# Each item in the dolo yaml file corresponds to an equation in the formal mathematics of the BufferStockTheory problem.
+#
+# One such item is the Euler equation described above, which can be rewritten as:
+#
+# \begin{align*}
+# c_{t}^{-\rho} & = R \beta \mathbb{E}_{t}[(\Gamma \psi c_{t+1})^{-\rho})] \\
+# % 0 & = & R \beta \mathbb{E}_{t}[(\Gamma \psi c_{t+1}/c_{t})^{-\rho})]-1
+# 1 & = R \beta \mathbb{E}_{t}[(\Gamma \psi \frac{c_{t+1}}{c_{t}})^{-\rho})] 
+# \\
+# 0 & = R \beta \mathbb{E}_{t}[(\Gamma \psi c_{t+1}/c_{t})^{-\rho})]-1
+# \end{align*}
+#
+#
+# The first such item we want to consider is labelled `arbitrage`.  In Dolo, the arbitrage equation represents a condition that should be equal to zero for an optimizing agent.  Furthermore, items with a future date (like `c(1)` which is equal to $c_{t+1}$ in the usual mathematical notation) are implicitly items whose expectation is being taken.  Dolo's specification of the model defines `perm` as the logarithm of what is called $\psi$, so `exp(perm(1))` is equivalent to $\psi_{t+1}$.  Finally, the expression `| 0.0 <= c <= m` corresponds to the liquidity constraint mentioned above (mathematically, $0 \leq c \leq m$). Thus, the equation below is how dolo represents the equation above:
+#
+#     arbitrage:
+#         - (R*β*((c(1)*exp(perm(1))*Γ)/c)^(-ρ)-1 ) | 0.0<=c<=m
+#
+#
+#
+
+# %% [markdown]
 # # HARK
 # The [Econ-ARK/HARK](https://github.com/econ-ark/HARK) toolkit's solution to this problem is part of the $\texttt{ConsIndShockModel.py}$ module in the $\texttt{ConsumptionSaving}$ directory of tools.  For an introduction to this module, see the [ConsIndShockModel.ipynb](https://econ-ark.org/notebooks) notebook at the [Econ-ARK](https://econ-ark.org) website.
 
-# %% {"code_folding": [0]}
+# %% {"code_folding": []}
 # Define a parameter dictionary with baseline parameter values
 
 # Set the baseline parameter values 
@@ -219,7 +243,7 @@ base_params['BoroCnstArt']  = None    # No artificial borrowing constraint
 
 from HARK.utilities import plotFuncsDer, plotFuncs
 from HARK.ConsumptionSaving.ConsIndShockModel import IndShockConsumerType
-# %% {"code_folding": [0]}
+# %% {"code_folding": []}
 # Create a model identical to the dolo model
 # Start with the HARK baseline parameters and modify 
 # to be like the dolo model 
@@ -234,14 +258,14 @@ base_params_dolo['DiscFac']      = 0.96
 #base_params_dolo['CubicBool']    = False
 model_HARK = IndShockConsumerType(**base_params_dolo,cycles=0) # cycles=0 indicates infinite horizon
 
-# %% {"code_folding": [0]}
+# %% {"code_folding": []}
 # Solve the HARK model 
 model_HARK.updateIncomeProcess()
 model_HARK.solve()
 model_HARK.UnempPrb = 0.05
 model_HARK.unpackcFunc()
 
-# %% {"code_folding": [0]}
+# %% {"code_folding": []}
 # Plot the results: Green is perfect foresight, red is HARK, black is dolo
 
 tab = tabulate(model_dolo, dr, 'm')
@@ -252,3 +276,8 @@ c_m  = model_HARK.cFunc[0](m)
 cPF = (np.array(m)-1+1/(1-PermGroFac/Rfree))*((Rfree-(Rfree * DiscFac)**(1/CRRA))/Rfree)
 plt.plot(tab['m'],c_m,color="red")
 plt.plot(m,cPF,color="green")
+
+# %%
+tab
+
+# %%
