@@ -183,7 +183,14 @@ dr = time_iteration(model_dolo,tol=1e-08,verbose=True)
 #
 # Each item in the dolo yaml file corresponds to an equation in the formal mathematics of the BufferStockTheory problem.
 #
-# One such item is the Euler equation described above, which can be rewritten as:
+# ### arbitrage
+#
+# The first such item we want to consider is labelled `arbitrage`.  In Dolo, the arbitrage equation represents a condition that should be equal to zero for an optimizing agent.  Furthermore, items with a future date (like `c(1)` which is equal to $c_{t+1}$ in the usual mathematical notation) are implicitly items whose expectation is being taken.  Dolo's specification of the model defines `perm` as the logarithm of what is called $\psi$, so `exp(perm(1))` is equivalent to $\psi_{t+1}$.  Finally, the expression `| 0.0 <= c <= m` corresponds to the liquidity constraint mentioned above (mathematically, $0 \leq c \leq m$). Thus, the equation below is how dolo represents the equation above:
+#
+#     arbitrage:
+#         - (R*β*((c(1)*exp(perm(1))*Γ)/c)^(-ρ)-1 ) | 0.0<=c<=m
+#
+# This equation is derived from the Euler equation described above, which can be rewritten as:
 #
 # \begin{align*}
 # c_{t}^{-\rho} & = R \beta \mathbb{E}_{t}[(\Gamma \psi c_{t+1})^{-\rho})] \\
@@ -193,14 +200,29 @@ dr = time_iteration(model_dolo,tol=1e-08,verbose=True)
 # 0 & = R \beta \mathbb{E}_{t}[(\Gamma \psi c_{t+1}/c_{t})^{-\rho})]-1
 # \end{align*}
 #
+# ### transition
 #
-# The first such item we want to consider is labelled `arbitrage`.  In Dolo, the arbitrage equation represents a condition that should be equal to zero for an optimizing agent.  Furthermore, items with a future date (like `c(1)` which is equal to $c_{t+1}$ in the usual mathematical notation) are implicitly items whose expectation is being taken.  Dolo's specification of the model defines `perm` as the logarithm of what is called $\psi$, so `exp(perm(1))` is equivalent to $\psi_{t+1}$.  Finally, the expression `| 0.0 <= c <= m` corresponds to the liquidity constraint mentioned above (mathematically, $0 \leq c \leq m$). Thus, the equation below is how dolo represents the equation above:
+# The second equation in the `dolang` model is:
 #
-#     arbitrage:
-#         - (R*β*((c(1)*exp(perm(1))*Γ)/c)^(-ρ)-1 ) | 0.0<=c<=m
+#     transition:
+#         - m = exp(tran) + (m(-1)-c(-1))*(R/(Γ*exp(perm)))
 #
+# Recall that the Bellman form of the original problem is:
 #
+# \begin{eqnarray*}
+# v_t(m_t) &=& \max_{c_t}~~ u(c_t) + \beta~\mathbb{E}_{t} [(\Gamma\psi_{t+1})^{1-\rho} v_{t+1}(m_{t+1}) ] \\
+# & s.t. & \\
+# a_t &=& m_t - c_t \\
+# m_{t+1} &=& R/(\Gamma \psi_{t+1}) a_t + \theta_{t+1} \\
+# \end{eqnarray*}
 #
+# Substituting the first condition, defining $a_t$, into the second, and rearranging, we get:
+#
+# \begin{eqnarray}
+# m_{t+1} &=& \theta_{t+1} +  (m_t - c_t) R/(\Gamma \psi_{t+1})
+# \end{eqnarray}
+#
+# In the `dolang` model, `tran == 1.0`; this is the mean of the transitory shock $\theta$. `exp(tran)` is $e$, the Euler number.
 
 # %% [markdown]
 # # HARK
