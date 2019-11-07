@@ -339,16 +339,18 @@ plt.plot([0,8],[MPCLower,MPCLower],color = 'black')
 plt.xlim(0,8)
 plt.ylim(0,1)
 plt.text(1.5,0.6,r'$\kappa(m) \equiv c^{\prime}(m)$',fontsize = 26,fontweight='bold')
+plt.arrow(1.45,0.61,-0.4,0,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
+
 if iflatexExists:
-    plt.text(5,0.87,r'$(\overline{\kappa}$',fontsize = 26,fontweight='bold')
+    plt.text(5,.82,r'$\overline{\kappa}$',fontsize = 26,fontweight='bold')
 else:
-    plt.text(5,0.87,r'$(1-\wp^{1/\rho}\Phi_{R})\equiv \overline{\kappa}$',fontsize = 26,fontweight='bold')
-    
+    plt.text(5,0.82,r'$(1-\wp^{1/\rho}\Phi_{R})\equiv \overline{\kappa}$',fontsize = 26,fontweight='bold')
+plt.arrow(4.95,0.825,-0.2,-0.03,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
+
 plt.text(0.5,0.07,kappaDef,fontsize = 26,fontweight='bold')
 plt.text(8.05,0,"$m$",fontsize = 26)
-plt.arrow(1.45,0.61,-0.4,0,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
-plt.arrow(2.2,0.07,0.2,-0.01,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
-plt.arrow(4.95,0.895,-0.2,0.03,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
+plt.arrow(.8,0.07,0.2,-0.01,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
+
 if Generator:
     plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.png'))
     plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.jpg'))
