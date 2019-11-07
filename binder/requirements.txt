@@ -9,4 +9,11 @@ pandas
 pandas-datareader
 statsmodels
 dolang
-dolo
+altair
+-e git+https://github.com/Econforge/dolo.git#egg=dolo
+tqdm
+altair
+jupyterlab>=1.0
+jupytext
+matplotlib
+dataclasses
