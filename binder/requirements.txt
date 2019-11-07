@@ -1,0 +1,12 @@
+matplotlib
+numpy
+ipywidgets
+scipy
+jupyter
+cite2c
+econ-ark
+pandas
+pandas-datareader
+statsmodels
+dolang
+dolo
