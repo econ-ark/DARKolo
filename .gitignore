@@ -383,3 +383,5 @@ latexmkrc
 
 #
 _region_.*
+__pycache__
+.ipynb_checkpoints
