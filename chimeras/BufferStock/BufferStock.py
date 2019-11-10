@@ -117,6 +117,7 @@ k_lower = 1.0-(model_HARK.Rfree**(-1.0))*(model_HARK.Rfree*model_HARK.DiscFac)**
 # %%
 # The last figure shows the upper and lower limits of the MPC
 plt.figure(figsize = (12,8))
+
 # Set the plot range of m
 m = np.linspace(0.001,8,1000)
 
@@ -130,7 +131,14 @@ kappaDef=r'$\underline{\kappa}$'
 if not iflatexExists:
     kappaDef=r'κ̲$\equiv(1-\Phi_{R})$'
 
-plt.plot(m,MPC,color = 'black')
+plt.plot(m,MPC,color = 'black',label="HARK")
+
+mT = m[:,np.newaxis]
+epsilon = 1e-7
+dr_prime = ((dr(mT+epsilon) - dr(mT))/epsilon).reshape(-1)
+
+plt.plot(m, dr_prime,color='blue',label='dolo')
+
 plt.plot([0,8],[MPCLower,MPCLower],color = 'black')
 plt.xlim(0,8)
 plt.ylim(0,1)
@@ -146,6 +154,7 @@ plt.arrow(1.45,0.61,-0.4,0,head_width= 0.02,width=0.001,facecolor='black',length
 plt.text(0.5,0.07,kappaDef,fontsize = 26,fontweight='bold')
 plt.text(8.05,0,"$m$",fontsize = 26)
 plt.arrow(.8,0.07,0.2,-0.01,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
+plt.legend()
 
 if Generator:
     plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.png'))
