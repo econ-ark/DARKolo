@@ -141,7 +141,7 @@ plt.plot(m, dr_prime,color='blue',label='dolo')
 
 plt.plot([0,8],[MPCLower,MPCLower],color = 'black')
 plt.xlim(0,8)
-plt.ylim(0,1)
+plt.ylim(0,1.1)
 plt.text(1.5,0.6,r'$\kappa(m) \equiv c^{\prime}(m)$',fontsize = 26,fontweight='bold')
 plt.arrow(1.45,0.61,-0.4,0,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
 
