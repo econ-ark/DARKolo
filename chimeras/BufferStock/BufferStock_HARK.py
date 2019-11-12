@@ -151,8 +151,8 @@ from HARK.ConsumptionSaving.ConsIndShockModel import IndShockConsumerType
 base_params_dolo = dict(base_params)
 base_params_dolo['BoroCnstArt']  = 0.0    # Liquidity constraint at 0
 base_params_dolo['UnempPrb']     = 0      # No point-mass on unemployment state 
-base_params_dolo['TranShkCount'] = 15      # Default number of nodes in dolo
-base_params_dolo['PermShkCount'] = 15
+base_params_dolo['TranShkCount'] = 25      # Default number of nodes in dolo
+base_params_dolo['PermShkCount'] = 25
 base_params_dolo['aXtraMax']     = BufferStockParameters.Common['max_m']  # Use same maximum as dolo
 base_params_dolo['aXtraCount']   = 100    # How dense to make the grid
 base_params_dolo['DiscFac']      = 0.96
