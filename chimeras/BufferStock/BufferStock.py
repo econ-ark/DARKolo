@@ -131,7 +131,9 @@ kappaDef=r'$\underline{\kappa}$'
 if not iflatexExists:
     kappaDef=r'κ̲$\equiv(1-\Phi_{R})$'
 
-plt.plot(m,MPC,color = 'black',label="HARK")
+plt.plot(m,MPC,
+         '.', markersize=1,
+         color = 'black',label="HARK")
 
 mT = m[:,np.newaxis]
 epsilon = 1e-7
