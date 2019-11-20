@@ -135,14 +135,12 @@
 # %% [markdown]
 # #### The Consumer
 
-# %% {"code_folding": [0, 6]}
-# Import generic setup tools
-
-# This is a jupytext paired notebook that autogenerates KrusellSmith.py
-# which can be executed from a terminal command line via "ipython KrusellSmith.py"
-# But a terminal does not permit inline figures, so we need to test jupyter vs terminal
-# Google "how can I check if code is executed in the ipython notebook"
-
+# %% {"code_folding": []}
+# Import related generic python packages
+import numpy as np
+from time import clock
+import matplotlib
+import matplotlib.pyplot as plt
 
 # Determine whether to make the figures inline (for spyder or jupyter)
 # vs whatever is the automatic setting that will apply if run from the terminal
