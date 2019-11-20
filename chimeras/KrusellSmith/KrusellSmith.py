@@ -146,8 +146,7 @@
 
 # Determine whether to make the figures inline (for spyder or jupyter)
 # vs whatever is the automatic setting that will apply if run from the terminal
-import remark # 20191113 CDC to Seb: Where do you propose that this module should go (permanently?) 
-   # in the /binder folder, where it could be installed by postBuild (unix) or postBuild.bat?
+
 # %matplotlib inline
 
 # Import the plot-figure library matplotlib
@@ -386,7 +385,7 @@ y1 = KSEconomy.AFunc[1](x)
 plt.plot(x,y0)
 plt.plot(x,y1)
 plt.xlim([bottom, top])
-remark.show('aggregate_savings')
+plt.show('aggregate_savings')
 
 
 print('Consumption function at each aggregate market resources gridpoint (in general equilibrium):')
@@ -397,7 +396,7 @@ for M in KSAgent.Mgrid:
     c_at_this_M = KSAgent.solution[0].cFunc[0](m_grid,M*np.ones_like(m_grid)) #Have two consumption functions, check this
     plt.plot(m_grid,c_at_this_M)
 
-remark.show('consumption_function')
+plt.show('consumption_function')
 
 print('Savings at each individual market resources gridpoint (in general equilibrium):')
 fig = plt.figure()
@@ -409,7 +408,7 @@ for M in KSAgent.Mgrid:
     c_at_this_M = KSAgent.solution[0].cFunc[1](m_grid,M*np.ones_like(m_grid)) #Have two consumption functions, check this
     plt.plot(m_grid,s_at_this_M)
     
-remark.show('savings_function')
+plt.show('savings_function')
 
 # %% [markdown]
 # ### The Wealth Distribution in KS
@@ -448,7 +447,7 @@ plt.xlabel('Percentile of net worth')
 plt.ylabel('Cumulative share of wealth')
 plt.legend(loc=2)
 plt.ylim([0,1])
-remark.show('wealth_distribution_1')
+plt.show('wealth_distribution_1')
 
 # %%
 # Calculate a measure of the difference between the simulated and empirical distributions
@@ -530,7 +529,7 @@ plt.xlabel('Percentile of net worth')
 plt.ylabel('Cumulative share of wealth')
 plt.legend(loc=2)
 plt.ylim([0,1])
-remark.show('wealth_distribution_2')
+plt.show('wealth_distribution_2')
 
 # %% {"code_folding": []}
 # The mean levels of wealth for the three types of consumer are 
@@ -547,7 +546,7 @@ for i in range(len(MyTypes)):
         plt.yticks([])
 plt.legend(loc=2)
 plt.title('Log Wealth Distribution of 3 Types')
-remark.show('log_wealth_3_types')
+plt.show('log_wealth_3_types')
 
 fig = plt.figure()
 # %% {"code_folding": []}
@@ -555,7 +554,7 @@ fig = plt.figure()
 plt.hist(np.log(sim_wealth),bins=np.arange(-2.,np.log(max(aLvl_all)),0.05))
 plt.yticks([])
 plt.title('Log Wealth Distribution of Original Model with One Type')
-remark.show('log_wealth_1')
+plt.show('log_wealth_1')
 
 # %% [markdown]
 # ### Target Wealth is Nonlinear in Time Preference Rate
@@ -586,4 +585,4 @@ theta = np.linspace(0.023,0.10,100)
 plt.plot(theta,1/(theta*(1+(theta-r)/sigma)-r))
 plt.xlabel(r'$\theta$')
 plt.ylabel('Target wealth')
-remark.show('target_wealth')
+plt.show('target_wealth')
