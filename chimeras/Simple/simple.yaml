@@ -8,7 +8,7 @@ symbols:
 equations:
   transition:
     - m = (m(-1)-c(-1))*R + p
-    - p = Γp(-1)
+    - p = Γ*p(-1)
 
   arbitrage:
     - β*(c(1)^(1 - ρ)/(1 - ρ)) | 0.0<=c<=m
