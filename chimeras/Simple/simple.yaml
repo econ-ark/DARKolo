@@ -7,7 +7,7 @@ symbols:
 
 equations:
   transition:
-    - m = (m(-1)-c(-1))*R + p
+    - m = (m(-1)-c(-1))*R + Γ*p(-1)
     - p = Γ*p(-1)
 
   arbitrage:
