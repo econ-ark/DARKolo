@@ -584,3 +584,5 @@ plt.plot(theta,1/(theta*(1+(theta-r)/sigma)-r))
 plt.xlabel(r'$\theta$')
 plt.ylabel('Target wealth')
 plt.show('target_wealth')
+
+# %%
