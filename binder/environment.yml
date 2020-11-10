@@ -2,6 +2,7 @@ name: dolo_env
 dependencies:
 - ipython
 - numba
+- dolo
 - numexpr
 - numpy
 - numpydoc
