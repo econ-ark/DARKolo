@@ -1,0 +1,60 @@
+name: Q_model
+
+symbols:
+
+  states: [k]
+  controls: [i]
+  values: [V]
+  parameters: [alpha, delta, omega]
+  rewards: [pi]
+  exogenous: [R,tau,itc_1,psi]
+
+
+definitions:
+  y: psi*k^alpha
+  y_k: psi*alpha*k^(alpha-1)
+  beta: 1/R
+  j: (k/2)*((i-delta*k)/k)^2*omega
+  xi: (i + j)*beta*(1-itc_1)
+  iota: (i/k-delta)
+  j_i: iota*omega
+  j_k: -(iota^2/2+iota*delta)*omega
+  lambda_1: (1+j_i)*(1-itc_1)
+  q_1: lambda_1/(1-itc_1)
+
+equations:
+
+  transition:
+    - k = (1-delta)*k(-1) + i(-1)
+
+  value:
+    - V = (1-tau)*y - xi + beta*V(1)
+
+  felicity:
+    - pi = (1-tau)*y - xi
+
+  arbitrage:
+    - (1+j_i)*(1-itc_1) = (1-tau)*y_k(1) + ((1-delta) + (1-delta)*j_i(1) - j_k(1))*beta*(1-itc_1(1))
+
+calibration:
+
+  # Parameters
+  alpha: 0.33
+  delta: 0.05
+  omega: 2
+
+  # Initial variable guess
+  k: 1
+  i: k*delta
+  pi: k^alpha - i
+  V: pi
+  R: 1.02
+  psi: 1
+  itc_1: 0
+  tau: 0
+  beta: 1/R
+  j: 0
+
+domain:
+    k: [0.00001, Inf]
+    R: [0.00001, Inf]

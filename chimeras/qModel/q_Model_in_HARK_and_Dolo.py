@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.2'
-#       jupytext_version: 1.2.3
+#       jupytext_version: 1.2.4
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -666,7 +666,7 @@ Qmodel.solve()
 
 ## Dolo
 
-QDolo = yaml_import("../Dolo/Q_model.yaml")
+QDolo = yaml_import("./Q_model.yaml")
 # We do not pass psi, tau, or zeta since they are handled not as parameters
 # but exogenous variables.
 QDolo.set_calibration(R = R, alpha = alpha, delta = delta, omega = omega)
