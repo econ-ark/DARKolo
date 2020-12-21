@@ -10,26 +10,26 @@ symbols:
    parameters:   [β, ρ, δ, α, lPmean, σ_lΨ, lΘmean, σ_lΘ]
    rewards:      [u]
 
-definitions:
-    Ψ: exp(lΨ)
-    Θ: exp(lΘ)
-    P: exp(lP)
-    a: m-c
+definitions: |
+    Ψ[t] = exp(lΨ[t])
+    Θ[t] = exp(lΘ[t])
+    P[t] = exp(lP[t])
+    a[t] = m[t]-c[t]
 
 equations:
 
-    arbitrage:
-       - 1 -  β*(1-δ+α*((a/Ψ(1))^(α-1))*(Θ(1)^(1-α)))*(Ψ(1)*c(1)/c)^(-ρ)  | 0.0 <= c <= m # Liquidity constraint 
+    arbitrage: |
+       1 -  β*(1-δ+α*((a[t]/Ψ[t+1])^(α-1))*(Θ[t+1]^(1-α)))*(Ψ[t+1]*c[t+1]/c[t])^(-ρ) ⟂ 0.0 <= c[t] <= m[t] 
 
-    transition:
-        - lP = lP(-1) + lΨ
-        - m = ((a(-1)/exp(lΨ))^α)*exp(lΘ)^(α-1)+(1-δ)*(a(-1)/exp(lΨ)) # oddly, can't sub Θ(1) for exp(lΘ(1)) (same with Ψ) though it works in arbitrage
+    transition: |
+        lP[t] = lP[t-1] + lΨ[t]
+        m[t] = ((a[t-1]/exp(lΨ[t]))^α)*exp(lΘ[t])^(α-1)+(1-δ)*(a[t-1]/exp(lΨ[t])) 
 
-    value:
-        - V = (c^(1-ρ))/(1-ρ) + β*V(1)
+    value: |
+        V[t] = (c[t]^(1-ρ))/(1-ρ) + β*V[t+1]
 
-    felicity:
-        - u =  (c^(1-ρ))/(1-ρ)
+    felicity: |
+        u[t] = (c[t]^(1-ρ))/(1-ρ)
 
 # Turned off because causes a strange error about how numba can't tell what type a is
 #    expectation:

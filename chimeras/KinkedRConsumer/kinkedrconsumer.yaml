@@ -7,12 +7,14 @@ symbols:
 
 equations:
 
-    transition:
-        - R = R_save*((m - c)>= 0) + R_borrow *((m - c)<0)
-        - m = exp(tran) + (m(-1)-c(-1))*(R/(Γ*exp(perm)))
+    definition: |
+        R[t] = R_save*((m[t] - c[t])>= 0) + R_borrow *((m[t] - c[t])<0)
 
-    arbitrage:
-        - (R*β*((c(1)*exp(perm(1))*Γ)/c)^(-ρ)-1 ) | 0.0<=c<=m - floor
+    transition: |
+        m[t] = exp(tran[t]) + (m[t-1]-c[t-1])*(R[t]/(Γ*exp(perm[t])))
+
+    arbitrage: |
+        (R[t]*β*((c[t+1]*exp(perm[t+1])*Γ)/c[t])^(-ρ)-1 ) | 0.0<=c[t]<=m[t] - floor
 
 calibration:
     β: 0.96

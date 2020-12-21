@@ -20,7 +20,6 @@
 # [Installation instructions](https://github.com/EconForge/dolo/wiki/Installation) for dolo involve a number of dependencies, including the dolo language "dolang."  This notebook assumes all these have been installed.
 
 # %%
-import dolang
 from dolo import *
 import BufferStockParameters
 
@@ -30,35 +29,36 @@ import BufferStockParameters
 # %%
 import sys
 import os
+
 os.getcwd()
 
 # %%
 model_dolo = yaml_import("./bufferstock.yaml")
-print( model_dolo )
+print(model_dolo)
 
 # %% [markdown]
-# ## Explaining the Dolo Model File 
+# ## Explaining the Dolo Model File
 #
 # Each item in the `bufferstock.yaml` file corresponds to an equation in the formal mathematics of the BufferStockTheory problem.
 #
 # ### arbitrage:
 #
-# The first such item we want to consider is labelled `arbitrage`.  In Dolo, the arbitrage equation represents a condition that should be equal to zero for an optimizing agent (perhaps it should be called the `no-arbitrage` equation since the idea is that the amount by which you could make yourself better is zero).  
+# The first such item we want to consider is labelled `arbitrage`.  In Dolo, the arbitrage equation represents a condition that should be equal to zero for an optimizing agent (perhaps it should be called the `no-arbitrage` equation since the idea is that the amount by which you could make yourself better is zero).
 #
-# See the dolo/dolark documentation to absorb syntactic conventions like the fact that time offsets are signified by parens; e.g., `c(-1)` is the variable `c` one period in the past.
+# See the dolo/dolark documentation to absorb syntactic conventions like the fact that time offsets are signified by parens; e.g., `c[t-1]` is the variable `c` one period in the past.
 #
 # If the model is stochastic, equations that involve a future-dated variable are calculated in expectation.
 #
-# Dolo's specification of the model defines `perm` as the logarithm of what is called $\psi$, so its exponential `exp(perm(1))` is equivalent to $\psi_{t+1}$ in the companion notebook's notation.  Finally, the expression `| 0.0 <= c <= m` corresponds to the liquidity constraint mentioned above (mathematically, $0 \leq c \leq m$). Thus, the arbitrage equation:
+# Dolo's specification of the model defines `perm` as the logarithm of what is called $\psi$, so its exponential `exp(perm[t+1])` is equivalent to $\psi_{t+1}$ in the companion notebook's notation.  Finally, the expression `| 0.0 <= c[t] <= m[t]` corresponds to the liquidity constraint mentioned above (mathematically, $0 \leq c \leq m$). Thus, the arbitrage equation:
 #
 #     arbitrage:
-#         - (R*β*((c(1)*exp(perm(1))*Γ)/c)^(-ρ)-1 ) | 0.0<=c<=m
+#         - (R*β*((c[t+1]*exp(perm[t+1])*Γ)/c[t])^(-ρ)-1 ) | 0.0<=c[t]<=m[t]
 #
-# is equivlent to the Euler equation in the HARK notebook, because:
+# is equivalent to the Euler equation in the HARK notebook, because:
 #
 # \begin{align*}
-# 0 & = R \beta \mathbb{E}_{t}[(\psi c_{t+1}\Gamma /c_{t})^{-\rho})]-1 \\ 
-# 1 & = R \beta \mathbb{E}_{t}[(\Gamma \psi \frac{c_{t+1}}{c_{t}})^{-\rho})] 
+# 0 & = R \beta \mathbb{E}_{t}[(\psi c_{t+1}\Gamma /c_{t})^{-\rho})]-1 \\
+# 1 & = R \beta \mathbb{E}_{t}[(\Gamma \psi \frac{c_{t+1}}{c_{t}})^{-\rho})]
 # \\c_{t}^{-\rho} & = R \beta \mathbb{E}_{t}[(\Gamma \psi c_{t+1})^{-\rho})] \\
 # \end{align*}
 #
@@ -67,7 +67,7 @@ print( model_dolo )
 # The second equation in the `dolang` model is:
 #
 #     transition:
-#         - m = exp(tran) + (m(-1)-c(-1))*(R/(Γ*exp(perm)))
+#         - m[t] = exp(tran[t]) + (m[t-1]-c[t-1])*(R/(Γ*exp(perm[t])))
 #
 # Recall that the dynamic budget constraints in the HARK problem are:
 # \begin{eqnarray*}
@@ -83,8 +83,10 @@ print( model_dolo )
 
 # %% {"code_folding": []}
 # Set a maximum value of the market resources ratio m for use in both models
-max_m = BufferStockParameters.Common['max_m']
-model_dolo.data['calibration']['max_m'] = max_m
+max_m = BufferStockParameters.Common["max_m"]
+model_dolo.data["calibration"]["max_m"] = max_m
 
-# Obtain the decision rule by time iteration
-dr = time_iteration(model_dolo,tol=1e-08,verbose=True)
+# Obtain the decision rule by time iteration amd improved time iteration
+dr = time_iteration(model_dolo, maxit=5, verbose=True)
+dr = improved_time_iteration(model_dolo, tol=1e-08, dr0=dr, verbose=True)
+# %%

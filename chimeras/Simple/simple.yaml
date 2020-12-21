@@ -6,12 +6,12 @@ symbols:
 
 
 equations:
-  transition:
-    - m = (m(-1)-c(-1))*R + Γ*p(-1)
-    - p = Γ*p(-1)
+  transition: |
+    m[t] = (m[t-1]-c[t-1])*R + Γ*p[t-1]
+    p[t] = Γ*p[t-1]
 
-  arbitrage:
-    - β*(c(1)^(1 - ρ)/(1 - ρ)) | 0.0<=c<=m
+  arbitrage: |
+    β*(c[t+1]^(1 - ρ)/(1 - ρ)) ⟂ 0.0<=c[t]<=m[t]
 
 calibration:
     β: 0.96
@@ -24,7 +24,7 @@ calibration:
 
 domain:
     m: [0.0, 500]
-    p: [0.0,500]
+    p: [0.0, 500]
 
 options:
     grid: !Cartesian
