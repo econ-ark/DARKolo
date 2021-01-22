@@ -4,5 +4,5 @@
 
 
 poetry install
-poetry run python -m ipykernel install --user --name=uptodate
+poetry run python -m ipykernel install --user --name=DARKolo
 
