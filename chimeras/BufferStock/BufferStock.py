@@ -23,7 +23,7 @@
 # This notebook compares the solutions to a standard buffer stock saving model obtained by the [Econ-ARK/HARK](https://github.com/econ-ark/HARK) toolkit and the [dolo](https://github.com/EconForge/dolo) modeling system.
 
 # %% [markdown]
-# ## [The Problem](http://econ.jhu.edu/people/ccarroll/papers/BufferStockTheory/#The-Problem) 
+# ## [The Problem](http://econ.jhu.edu/people/ccarroll/papers/BufferStockTheory/#The-Problem)
 #
 # [This paper](http://econ.jhu.edu/people/ccarroll/papers/BufferStockTheory/#The-Problem) defines a buffer stock saving model and calibrates parameters:
 #
@@ -43,7 +43,7 @@
 # A_{t}   &=&M_{t}-C_{t}.  \label{eq:DBCparts}
 # \end{eqnarray}
 #
-# The consumer's permanent noncapital income $P$ (in the sense of [Friedman (1957)](http://www.econ2.jhu.edu/people/ccarroll/ATheoryv3NBER.pdf)) grows by a predictable factor $\PermGroFac$ and is subject to an unpredictable lognormally distributed multiplicative shock $\mathbb{E}_{t}[\psi_{t+1}]=1$, 
+# The consumer's permanent noncapital income $P$ (in the sense of [Friedman (1957)](http://www.econ2.jhu.edu/people/ccarroll/ATheoryv3NBER.pdf)) grows by a predictable factor $\PermGroFac$ and is subject to an unpredictable lognormally distributed multiplicative shock $\mathbb{E}_{t}[\psi_{t+1}]=1$,
 # \begin{eqnarray}
 # P_{t+1} & = & P_{t} \PermGroFac \psi_{t+1}
 # \end{eqnarray}
@@ -62,7 +62,7 @@
 # m_{t+1} &=& R/(\Gamma \psi_{t+1}) a_t + \theta_{t+1} \\
 # \end{eqnarray*}
 #
-# and the [Euler equation](http://www.econ2.jhu.edu/people/ccarroll/public/lecturenotes/Consumption/Envelope) for this model is 
+# and the [Euler equation](http://www.econ2.jhu.edu/people/ccarroll/public/lecturenotes/Consumption/Envelope) for this model is
 #
 # \begin{align*}
 # c_{t}^{-\rho} & = R \beta \mathbb{E}_{t}[(\Gamma \psi c_{t+1})^{-\rho})] %\\
@@ -84,22 +84,24 @@ import os
 my_file_path = os.path.dirname(os.path.abspath("BufferStockTheory.py"))
 
 # Obtain the solution to the model using the HARK toolkit (see the standalone BufferStockTheory_HARK notebook)
-exec(open(my_file_path+r'/BufferStock_HARK.py').read())
+exec(open(my_file_path + r"/BufferStock_HARK.py").read())
 
 # Obtain the solution using dolo (see the standalone BufferStockTheory_dolo notebook)
-exec(open(my_file_path+r'/BufferStock_dolo.py').read())
+exec(open(my_file_path + r"/BufferStock_dolo.py").read())
 
 # %% {"code_folding": []}
 # Plot the results: Green is perfect foresight, red is HARK, black is dolo
 
-tab = tabulate(model_dolo, dr, 'm') # Tabulate points on the dolo decision rule
-plt.plot(tab['m'],tab['c'])     # This is pretty cool syntax
-m = tab.iloc[:,2]
-c_m  = model_HARK.cFunc[0](m)   # Get points on the HARK consumption rule
+tab = tabulate(model_dolo, dr, "m")  # Tabulate points on the dolo decision rule
+plt.plot(tab["m"], tab["c"])  # This is pretty cool syntax
+m = tab.iloc[:, 2]
+c_m = model_HARK.cFunc[0](m)  # Get points on the HARK consumption rule
 # cPF uses the analytical formula for the perfect foresight solution
-cPF = (np.array(m)-1+1/(1-PermGroFac/Rfree))*((Rfree-(Rfree * DiscFac)**(1/CRRA))/Rfree)
-plt.plot(tab['m'],c_m,color="red")
-plt.plot(m,cPF,color="green")
+cPF = (np.array(m) - 1 + 1 / (1 - PermGroFac / Rfree)) * (
+    (Rfree - (Rfree * DiscFac) ** (1 / CRRA)) / Rfree
+)
+plt.plot(tab["m"], c_m, color="red")
+plt.plot(m, cPF, color="green")
 
 # %% [markdown]
 # ### [Upper and Lower Limits of the Marginal Propensity to Consume](https://econ.jhu.edu/people/ccarroll/papers/BufferStockTheory/#MPCLimits)
@@ -111,15 +113,17 @@ plt.plot(m,cPF,color="green")
 # %%
 # Define k_lower, h_inf and perfect foresight consumption function, upper bound of consumption function and lower
 # bound of consumption function.
-k_lower = 1.0-(model_HARK.Rfree**(-1.0))*(model_HARK.Rfree*model_HARK.DiscFac)**(1.0/model_HARK.CRRA)
+k_lower = 1.0 - (model_HARK.Rfree ** (-1.0)) * (
+    model_HARK.Rfree * model_HARK.DiscFac
+) ** (1.0 / model_HARK.CRRA)
 
 
 # %%
 # The last figure shows the upper and lower limits of the MPC
-plt.figure(figsize = (12,8))
+plt.figure(figsize=(12, 8))
 
 # Set the plot range of m
-m = np.linspace(0.001,8,1000)
+m = np.linspace(0.001, 8, 1000)
 
 # Use the HARK method derivative to get the derivative of cFunc, and the values are just the MPC
 MPC = model_HARK.cFunc[0].derivative(m)
@@ -127,25 +131,32 @@ MPC = model_HARK.cFunc[0].derivative(m)
 # Define the lower bound of MPC
 MPCLower = k_lower
 
-kappaDef=r'$\underline{\kappa}$'
+kappaDef = r"$\underline{\kappa}$"
 if not iflatexExists:
-    kappaDef=r'κ̲$\equiv(1-\Phi_{R})$'
+    kappaDef = r"κ̲$\equiv(1-\Phi_{R})$"
 
-plt.plot(m,MPC,
-         '.', markersize=1,
-         color = 'black',label="HARK")
+plt.plot(m, MPC, ".", markersize=1, color="black", label="HARK")
 
-mT = m[:,np.newaxis]
+mT = m[:, np.newaxis]
 epsilon = 1e-7
-dr_prime = ((dr(mT+epsilon) - dr(mT))/epsilon).reshape(-1)
+dr_prime = ((dr(mT + epsilon) - dr(mT)) / epsilon).reshape(-1)
 
-plt.plot(m, dr_prime,color='blue',label='dolo')
+plt.plot(m, dr_prime, color="blue", label="dolo")
 
-plt.plot([0,8],[MPCLower,MPCLower],color = 'black')
-plt.xlim(0,8)
-plt.ylim(0,1.1)
-plt.text(1.5,0.6,r'$\kappa(m) \equiv c^{\prime}(m)$',fontsize = 26,fontweight='bold')
-plt.arrow(1.45,0.61,-0.4,0,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
+plt.plot([0, 8], [MPCLower, MPCLower], color="black")
+plt.xlim(0, 8)
+plt.ylim(0, 1.1)
+plt.text(1.5, 0.6, r"$\kappa(m) \equiv c^{\prime}(m)$", fontsize=26, fontweight="bold")
+plt.arrow(
+    1.45,
+    0.61,
+    -0.4,
+    0,
+    head_width=0.02,
+    width=0.001,
+    facecolor="black",
+    length_includes_head="True",
+)
 
 # if iflatexExists:
 #     plt.text(5,.82,r'$\overline{\kappa}$',fontsize = 26,fontweight='bold')
@@ -153,18 +164,27 @@ plt.arrow(1.45,0.61,-0.4,0,head_width= 0.02,width=0.001,facecolor='black',length
 #     plt.text(5,0.82,r'$(1-\wp^{1/\rho}\Phi_{R})\equiv \overline{\kappa}$',fontsize = 26,fontweight='bold')
 # plt.arrow(4.95,0.825,-0.2,-0.03,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
 
-plt.text(0.5,0.07,kappaDef,fontsize = 26,fontweight='bold')
-plt.text(8.05,0,"$m$",fontsize = 26)
-plt.arrow(.8,0.07,0.2,-0.01,head_width= 0.02,width=0.001,facecolor='black',length_includes_head='True')
+plt.text(0.5, 0.07, kappaDef, fontsize=26, fontweight="bold")
+plt.text(8.05, 0, "$m$", fontsize=26)
+plt.arrow(
+    0.8,
+    0.07,
+    0.2,
+    -0.01,
+    head_width=0.02,
+    width=0.001,
+    facecolor="black",
+    length_includes_head="True",
+)
 plt.legend()
 
 if Generator:
-    plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.png'))
-    plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.jpg'))
-    plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.pdf'))
-    plt.savefig(os.path.join(Figures_HARK_dir, 'MPCLimits.svg'))
+    plt.savefig(os.path.join(Figures_HARK_dir, "MPCLimits.png"))
+    plt.savefig(os.path.join(Figures_HARK_dir, "MPCLimits.jpg"))
+    plt.savefig(os.path.join(Figures_HARK_dir, "MPCLimits.pdf"))
+    plt.savefig(os.path.join(Figures_HARK_dir, "MPCLimits.svg"))
 if not in_ipynb():
-    plt.show(block=False) 
+    plt.show(block=False)
     plt.pause(1)
 else:
-    plt.show(block=True) # Change to False if you want to run uninterrupted
+    plt.show(block=True)  # Change to False if you want to run uninterrupted

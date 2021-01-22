@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "DARKolo"
+version = "0.1.0"
+description = "DARKolo is Where Econ-ARK and Dolo/DolARK Connect"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+dolo = { git = "https://github.com/EconForge/dolo.py.git", rev = "e0e60021d87835beba0874b577691b113b5cf6ac" }
+dolang = { git = "https://github.com/EconForge/dolang.py.git", rev = "9120ef273c37affe5db5dc7854b5db0bfde02e61" }
+dolark = { git = "https://github.com/EconForge/dolark.git", rev = "0e744c95082a3c5bf923f3f43627694940340612" }
+ipython = "^7.19.0"
+ipykernel = "^5.4.2"
+numpy = "^1.19.4"
+
+[tool.poetry.dev-dependencies]
+black = "^20.8b1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

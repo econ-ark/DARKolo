@@ -10,31 +10,31 @@ symbols:
    parameters:   [β, ρ, δ, α, lPmean, σ_lΨ, lΘmean, σ_lΘ, n]
    rewards:      [u]
 
-definitions:
-    P: exp(lP)
-    Θ: exp(lΘ)
-    y: (k^α)*(Θ^(1-α))-δ*k
+definitions: |
+    P[t] = exp(lP[t])
+    Θ[t] = exp(lΘ[t])
+    y[t] = (k[t]^α)*(Θ^(1-α))-δ*k[t]
 #    R: 1-δ+α*(k^(α-1))*(Θ^(1-α))
 #    m: (k^α)*(Θ^(1-α))+(1-δ)*k
-    m: y+k
+    m[t] = y[t]+k[t]
 #    a: m-c
 #    w: (1-α)*(Θ^(-α))*k^α
 
 equations:
 
-    arbitrage:
-       - 1 -  β*(1-δ+α*(((m-c)/exp(lΨ(1)))^(α-1))*(exp(lΘ(1))^(1-α)))*               (exp(lΨ(1))*c(1)/c)^(-ρ)  | 0.0 <= c <= 3.0 #k^α*(exp(lΘ))^(1-α)+(1-δ)*k # c needs to be less than everything
+    arbitrage: |
+       1 -  β*(1-δ+α*(((m[t]-c[t])/exp(lΨ[t+1]))^(α-1))*(exp(lΘ[t+1]))^(1-α)))*(exp(lΨ[t+1])*c[t+1]/c[t])^(-ρ) ⟂ 0.0 <= c[t] <= 3.0 #k^α*(exp(lΘ))^(1-α)+(1-δ)*k # c needs to be less than everything
 
-    transition:
-        - lP = lP(-1) + lΨ
-        - k = (m(-1)-c(-1))/exp(lΨ)
+    transition: |
+        lP[t] = lP[t-1] + lΨ[t]
+        k[t] = (m[t-1]-c[t-1])/exp(lΨ[t])
 #        - m = (((m(-1)-c(-1))/exp(lΨ))^α)*exp(lΘ)^(α-1)+(1-δ)*((m(-1)-c(-1))/exp(lΨ))
 
-    value:
-        - V = (c^(1-ρ))/(1-ρ) + β*V(1)
+    value: |
+        V[t] = (c[t]^(1-ρ))/(1-ρ) + β*V[t+1]
 
-    felicity:
-        - u =  (c^(1-ρ))/(1-ρ)
+    felicity: |
+        u[t] = (c[t]^(1-ρ))/(1-ρ)
 
 #    expectation:
 #        - μ = (    R(1)            /exp(lΨ(1)))                    *(exp(lΨ(1)*c(1))^(-ρ))

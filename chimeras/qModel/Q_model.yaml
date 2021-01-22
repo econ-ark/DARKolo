@@ -10,31 +10,31 @@ symbols:
   exogenous: [R,tau,itc_1,psi]
 
 
-definitions:
-  y: psi*k^alpha
-  y_k: psi*alpha*k^(alpha-1)
-  beta: 1/R
-  j: (k/2)*((i-delta*k)/k)^2*omega
-  xi: (i + j)*beta*(1-itc_1)
-  iota: (i/k-delta)
-  j_i: iota*omega
-  j_k: -(iota^2/2+iota*delta)*omega
-  lambda_1: (1+j_i)*(1-itc_1)
-  q_1: lambda_1/(1-itc_1)
+definitions: |
+  y[t] = psi[t]*k[t]^alpha
+  y_k[t] = psi[t]*alpha*k[t]^(alpha-1)
+  beta[t] = 1/R[t]
+  j[t] = (k[t]/2)*((i[t]-delta*k[t])/k[t])^2*omega
+  xi[t] = (i[t] + j[t])*beta[t]*(1-itc_1[t])
+  iota[t] = (i[t]/k[t]-delta)
+  j_i[t] = iota[t]*omega
+  j_k[t] = -(iota[t]^2/2+iota[t]*delta)*omega
+  lambda_1[t] = (1+j_i[t])*(1-itc_1[t])
+  q_1[t] = lambda_1[t]/(1-itc_1[t])
 
 equations:
 
-  transition:
-    - k = (1-delta)*k(-1) + i(-1)
+  transition: |
+    k[t] = (1-delta)*k[t-1] + i[t-1]
 
-  value:
-    - V = (1-tau)*y - xi + beta*V(1)
+  value: |
+    V[t] = (1-tau[t])*y[t] - xi[t] + beta[t]*V[t+1]
 
-  felicity:
-    - pi = (1-tau)*y - xi
+  felicity: |
+    pi[t] = (1-tau[t])*y[t] - xi[t]
 
-  arbitrage:
-    - (1+j_i)*(1-itc_1) = (1-tau)*y_k(1) + ((1-delta) + (1-delta)*j_i(1) - j_k(1))*beta*(1-itc_1(1))
+  arbitrage: |
+    (1+j_i[t])*(1-itc_1[t]) - ((1-tau[t])*y_k[t+1] + ((1-delta) + (1-delta)*j_i[t+1] - j_k[t+1])*beta[t]*(1-itc_1[t+1]))
 
 calibration:
 
@@ -57,4 +57,3 @@ calibration:
 
 domain:
     k: [0.00001, Inf]
-    R: [0.00001, Inf]

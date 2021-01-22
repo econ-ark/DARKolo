@@ -7,11 +7,11 @@ symbols:
 
 equations:
 
-    transition:
-        - m = exp(tran) + (m(-1)-c(-1))*(R/(Γ*exp(perm)))
+    transition: |
+        m[t] = exp(tran[t]) + (m[t-1]-c[t-1])*(R/(Γ*exp(perm[t])))
 
-    arbitrage:
-        - (R*β*((c(1)*exp(perm(1))*Γ)/c)^(-ρ)-1 ) | 0.0<=c<=m
+    arbitrage: |
+        (R*β*((c[t+1]*exp(perm[t+1])*Γ)/c[t])^(-ρ)-1 ) ⟂ 0.0 <= c[t] <= m[t]
 
 calibration:
     β: 0.96
@@ -30,7 +30,7 @@ domain:
     m: [0.0, max_m]
 
 exogenous: !Normal
-    Sigma: [[σ_perm^2,         0]
+    Σ:     [[σ_perm^2,         0]
            ,[0,        σ_tran^2]]
 
 options:
