@@ -2,14 +2,15 @@
 # ---
 # jupyter:
 #   jupytext:
+#     cell_metadata_json: true
 #     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
-#       format_version: '1.2'
-#       jupytext_version: 1.2.4
+#       format_version: '1.3'
+#       jupytext_version: 1.13.0
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -192,13 +193,8 @@ QDolo.set_calibration(R=R, alpha=alpha, delta=delta, omega=omega)
 # %% {"code_folding": [0]}
 def simul_change_dolo(model, k0, exog0, exog1, t_change, T_sim):
 
+    mod = deepcopy(model)
     # The first step is to create time series for the exogenous variables
-    exog = np.array(
-        [
-            exog1,
-        ]
-        * (T_sim - t_change)
-    )
     if t_change > 0:
         exog = np.concatenate(
             (
@@ -208,14 +204,25 @@ def simul_change_dolo(model, k0, exog0, exog1, t_change, T_sim):
                     ]
                     * (t_change)
                 ),
-                exog,
+                np.array(
+                    [
+                        exog1,
+                    ]
+                    * (T_sim - t_change)
+                ),
             ),
             axis=0,
         )
-    exog = pd.DataFrame(exog, columns=["R", "tau", "itc_1", "psi"])
+        exog = pd.DataFrame(exog, columns=["R", "tau", "itc_1", "psi"])
+    else:
+        exog = None
+        mod.set_calibration(R = exog1[0],tau = exog1[1], itc_1 = exog1[2],
+                            psi = exog1[3])
+        
+    
 
     # Simpulate the optimal response
-    dr = pf.deterministic_solve(model=model, shocks=exog, T=T_sim, verbose=True, s1=k0)
+    dr = pf.deterministic_solve(model=mod, exogenous=exog, T=T_sim, verbose=True, s0=k0)
 
     # Dolo uses the first period to report the steady state
     # so we ommit it.
