@@ -10,7 +10,8 @@ pandas-datareader
 statsmodels
 dolang
 altair
-dolo
+dolo==0.4.9.15
+dolang==0.0.15
 tqdm
 altair
 jupyterlab>=1.0

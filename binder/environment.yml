@@ -2,7 +2,8 @@ name: dolo_env
 dependencies:
 - ipython
 - numba
-- dolo
+- dolo==0.4.9.15
+- dolang==0.0.15
 - numexpr
 - numpy
 - numpydoc

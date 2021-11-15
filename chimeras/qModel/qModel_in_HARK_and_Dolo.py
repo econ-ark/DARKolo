@@ -8,9 +8,9 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.13.0
+#       jupytext_version: 1.13.1
 #   kernelspec:
-#     display_name: Python 3 (ipykernel)
+#     display_name: Python 3
 #     language: python
 #     name: python3
 # ---
@@ -24,6 +24,33 @@
 #
 # Both implementations follow Christopher D. Carroll's graduate
 # Macroeconomics [lecture notes](http://www.econ2.jhu.edu/people/ccarroll/public/lecturenotes/Investment/qModel/).
+
+# %%
+# Check that the right version of dolo is installed
+
+# Dolo (at the time of writing this notebook) is in development and
+# undergoing frequent changes. If the notebook does not work, a good
+# hypothesis is that changes have been made to dolo. Thus, we check
+# that the right version is installed
+import dolo
+import dolang
+
+dolo_ver = '0.4.9.15'
+dolang_ver = '0.0.15'
+
+dolo_ver_bool = dolo.__version__ == dolo_ver
+dolang_ver_bool = dolang.__version__ == dolang_ver
+
+if not dolo_ver_bool:
+    print('This notebook was developed using version ' + dolo_ver + ' of dolo.')
+    print('If there are errors or unexpected results, try installing that version using')
+    print('pip install --upgrade dolo==' + dolo_ver)
+    
+
+if not dolang_ver_bool:
+    print('This notebook was developed using version ' + dolang_ver + ' of dolang.')
+    print('If there are errors or unexpected results, try installing that version using')
+    print('pip install --upgrade dolang==' + dolang_ver)
 
 # %% {"code_folding": []}
 # Preamble
