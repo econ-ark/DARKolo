@@ -11,7 +11,7 @@ statsmodels
 dolang
 altair
 dolo==0.4.9.15
-dolang==0.0.15
+dolang==0.0.14
 tqdm
 altair
 jupyterlab>=1.0

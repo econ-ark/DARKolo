@@ -3,7 +3,7 @@ dependencies:
 - ipython
 - numba
 - dolo==0.4.9.15
-- dolang==0.0.15
+- dolang==0.0.14
 - numexpr
 - numpy
 - numpydoc
